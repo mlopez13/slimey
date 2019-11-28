@@ -1,81 +1,86 @@
 
+// Library.
 import mlopez13 from "../mlopez13/index.js";
 const {Container, Level, Sprite, Text, Texture} = mlopez13;
 
+// Texture.
 const textureSpace = new Texture("res/images/space.png");
+
+// Constants.
+import {GAME_H} from "../constants/index.js";
+const titleY = GAME_H / 2 - 100;
+
+// --------
+// --------
+// --------
+// GAME OVER SCREEN.
 
 class GameOverScreen extends Container {
 	
-	constructor(game, controls, stats, onTitle) {
+	constructor(game, controls, stats, nextScreen) {
+		
+		// Container constructor.
 		super();
 		
-		this.game = game;
+		// Width and length.
+		const {w, h} = game;
+		
+		// Controls and next screen references.
 		this.controls = controls;
-		this.stats = stats;
-		this.onTitle = onTitle;
-		
-		const iniY = game.h / 2 - 100;
-		
 		controls.reset();
+		this.nextScreen = nextScreen;
 		
+		// Add space.
 		const space = this.add(new Sprite(textureSpace));
 		
-		// GAME OVER title.
-		const title = new Text("GAME OVER.", {			
-			font: "bold 50pt georgia",
-			fill: "red",
-			align: "center"
-		});
-		title.pos = {x: game.w/2, y: iniY};
-		this.add(title);
+		if (stats.sand == stats.maxSand) {
+			const title = this.add(new Text("YOU DID IT!!!",
+				{font: "bold 50pt georgia", fill: "#ADFF2F", align: "center"},
+				{font: "bold 51pt georgia", fill: "#00C000", align: "center"}
+			));
+			title.pos = {x: w / 2, y: titleY};
+			this.title = title;
+		} else {
+			const title = this.add(new Text("GAME OVER.",
+				{font: "bold 50pt georgia", fill: "red", align: "center"},
+				{font: "bold 51pt georgia", fill: "#8B0000", align: "center"}
+			));
+			title.pos = {x: w / 2, y: titleY};
+			this.title = title;
+		}
 		
 		// SCORE.
-		const score = new Text("Sand collected: " + stats.sand + "/" + stats.maxSand +
-			" (" + (stats.sand/stats.maxSand*100).toFixed(0) + "%)", {			
-				font: "bold 20pt georgia",
-				fill: "yellow",
-				align: "center"
-		});
-		score.pos = {x: game.w/2, y: iniY + 120};
+		const score = new Text("Sand collected: " + stats.sand + "/" + stats.maxSand + " (" +
+			(stats.sand/stats.maxSand*100).toFixed(0) + "%)",
+			{font: "bold 20pt georgia", fill: "yellow", align: "center"}
+		);
+		score.pos = {x: w / 2, y: titleY + 120};
 		this.add(score);
 		
-		const spacebar = this.add(new Container());
-		spacebar.visible = false;
-		makeSpacebar(spacebar, game);
-		this.spacebar = spacebar;
+		const message = this.add(new Text("Press SPACEBAR to replay!",
+			{font: "bold 20pt georgia", fill: "red", align: "center"}
+		));
+		message.visible = false;
+		message.pos = {x: w / 2, y: h - 80};
+		this.message = message;
 		
-		// Keep reference.
-		this.iniY = iniY;
-		this.title = title;
 	}
 	
 	update(dt, t) {
-		super.update(dt, t);
 		
-		const {iniY, title, controls} = this;
+		const {title, message, controls} = this;
 		
-		title.pos.y = iniY + 20*Math.sin(2*t);
+		// Title movement and message visibility.
+		title.pos.y = titleY + 20 * Math.sin(2 * t);
+		this.message.visible = Math.floor(2*t) % 2;
 		
+		// Go to next screen if SPACEBAR is hit.
 		if (controls.action) {
-			this.onTitle();
+			this.nextScreen();
 		}
 		
-		this.spacebar.visible = Math.floor(2*t) % 2;
 	}
 
-}
-
-function makeSpacebar(spacebar, game) {
-	
-	const message = spacebar.add(new Text(
-		"Press SPACEBAR to replay!",
-	{
-		font: "bold 20pt georgia",
-		fill: "red",
-		align: "center"
-	}));
-	message.pos = {x: game.w/2, y: 400};
-	
 }
 
 export default GameOverScreen;

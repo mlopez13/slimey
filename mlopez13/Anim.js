@@ -1,6 +1,6 @@
 
-
 class Anim {
+	
 	constructor(frames, rate) {
 		this.frames = frames;
 		this.rate = rate;
@@ -8,11 +8,11 @@ class Anim {
 	}
 	
 	update(dt) {
-		const {rate, frames} = this;
+		const {frames, rate} = this;
 		if ((this.curTime += dt) > rate) {
-			this.curFrame++;
+			this.curFrame = (this.curFrame + 1) % frames.length;
 			// Change of frame.
-			this.frame = frames[this.curFrame % frames.length];
+			this.frame = frames[this.curFrame];
 			this.curTime -= rate;
 		}
 	}
@@ -22,6 +22,7 @@ class Anim {
 		this.curFrame = 0;
 		this.curTime = 0;
 	}
+	
 }
 
 export default Anim;

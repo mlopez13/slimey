@@ -2,13 +2,18 @@
 import Anim from "./Anim.js";
 
 class AnimManager {
+	
 	constructor(e) {
-		// List of animation sequences:
+		
+		// List of animation sequences.
 		this.anims = {};
 		
 		this.running = false;
 		this.frameSource = e.frame || e;
+		
+		// Current is a string with the name of the current animation.
 		this.current = null;
+		
 	}
 	
 	add(name, frames, speed) {
@@ -18,13 +23,17 @@ class AnimManager {
 	
 	// The argument "anim" here is a String.
 	play(anim) {
+		
 		const {current, anims} = this;
+		
 		if (anim === current) {
 			return;
 		}
+		
 		// Current animation.
 		this.current = anim;
 		anims[anim].reset();
+		
 	}
 	
 	stop() {
@@ -32,6 +41,7 @@ class AnimManager {
 	}
 	
 	update(dt) {
+		
 		const {current, anims, frameSource} = this;
 		
 		// If current is null.
@@ -44,6 +54,7 @@ class AnimManager {
 		
 		frameSource.x = anim.frame.x;
 		frameSource.y = anim.frame.y;
+		
 	}
 }
 

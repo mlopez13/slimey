@@ -27,7 +27,6 @@ class Container {
 		});
 	}
 	
-	// So that bullets.children.forEach(...) becomes bullets.map(...).
 	map(f) {
 		return this.children.map(f);
 	}

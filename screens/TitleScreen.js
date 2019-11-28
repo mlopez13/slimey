@@ -1,68 +1,101 @@
 
+// Library.
 import mlopez13 from "../mlopez13/index.js";
 const {Container, math, Sprite, Text, Texture, TileSprite} = mlopez13;
 
+// Entities.
 import Slimey from "../entities/Slimey.js";
 import Toothy from "../entities/Toothy.js";
 
-const textureSpace = new Texture("res/images/space.png");
-const textureBg = new Texture("res/images/tiles-bg.png");
+// Textures.
+const texture = {
+	bg: new Texture("res/images/tiles.png"),
+	space: new Texture("res/images/space.png")
+};
 
-var tNow = 0;
+// Constants.
+import {TILE_W, TILE_H, SAND_Y} from "../constants/index.js";
+
+// --------
+// --------
+// --------
+// TITLE SCREEN.
 
 class TitleScreen extends Container {
 	
-	constructor(game, controls, onStart) {
+	constructor(game, controls, nextScreen) {
+		
+		// Container constructor.
 		super();
-		this.onStart = onStart;
+		
+		// Width and length.
+		const {w, h} = game;
+		
+		// Controls and next screen references.
 		this.controls = controls;
 		controls.reset();
+		this.nextScreen = nextScreen;
 		
-		const space = this.add(new Sprite(textureSpace));
+		// Add space.
+		this.add(new Sprite(texture.space));
 		
-		const title = this.add(new Container());
-		this.titleY = game.h/2 - 50;
-		title.pos = {x: game.w/2, y: this.titleY};
-		makeTitle(title, game);
-		this.title = title;
+		// Add title.
+		const title = this.add(new Text("SLIMEY",
+			{font: "bold 75pt georgia", fill: "#ADFF2F", align: "center"},
+			{font: "bold 77pt georgia", fill: "#00C000", align: "center"}
+		));
+		title.pos = {x: w / 2, y: h / 2 - 75};
 		
+		// Add description.
 		const desc = this.add(new Container());
 		desc.visible = false;
 		makeDescription(desc, game);
+		
+		// Add message.
+		const message = this.add(new Text("Press SPACEBAR to start!",
+			{font: "bold 20pt georgia", fill: "red", align: "center"}
+		));
+		message.visible = false;
+		message.pos = {x: w / 2, y: h - 80};
+		
+		// Keep references.
+		this.title = title;
 		this.desc = desc;
+		this.message = message;
 		
-		const spacebar = this.add(new Container());
-		spacebar.visible = false;
-		makeSpacebar(spacebar, game);
-		this.spacebar = spacebar;
+		// Timer variables.
+		this.titleLife = 1;
+		this.descLife = 1;
 		
-		this.titleTime = 1;
-		this.titleLife = this.titleTime;
-		this.descTime = 2;
-		
-		tNow = 0;
 	}
 	
 	update(dt, t) {
 		
+		// Container update.
 		super.update(dt, t);
-		const {controls, title, titleY, titleTime, desc, descTime, spacebar} = this;
 		
+		const {controls, nextScreen, title, desc, message} = this;
+		
+		// Go to next screen if SPACEBAR is hit.
 		if (controls.action) {
-			this.onStart();
+			nextScreen();
 		}
 		
+		// Title movement and visibility of description and message.
 		if (title.pos.y > 60) {
 			if (this.titleLife > 0) {
 				this.titleLife -= dt;
 			} else {
-				title.pos.y = titleY - (titleY - 55)/(1 + Math.exp(5*(descTime - tNow)));
-				tNow += dt;
+				title.pos.y -= 100 * dt;
 			}
 		} else {
 			title.pos.y = 60;
 			desc.visible = true;
-			spacebar.visible = Math.floor(2*t) % 2;
+			if (this.descLife > 0) {
+				this.descLife -= dt;
+			} else {
+				message.visible = Math.floor(2 * t) % 2;
+			}
 		}
 		
 	}
@@ -73,99 +106,55 @@ export default TitleScreen;
 
 
 
+// --------
+// --------
+// --------
 // FUNCTIONS
-
-function makeTitle(title, game) {
-	
-	const title0 = title.add(new Text("SLIMEY", {
-		font: "bold 75pt georgia",
-		fill: "#ADFF2F",
-		align: "center"
-	}, {
-		font: "bold 77pt georgia",
-		fill: "#00C000",
-		align: "center"
-	}));
-	
-}
 
 function makeDescription(desc, game) {
 	
-	const topY = 190;
+	// Width and length.
+	const {w, h} = game;
 	
-	const desc0 = desc.add(new Text(
-		"This is SLIMEY:",
-	{
-		font: "bold 20pt georgia",
-		fill: "#FFFFFF",
-		align: "left"
-	}, {
-		font: "bold 25pt impact",
-		fill: "#000000",
-		align: "left"
-	}));
-	desc0.pos = {x: 70, y: topY};
+	const descX = w / 2 - 250;
+	const descY = h / 2 - 50;
 	
+	// (1) First line.
+	const desc0 = desc.add(new Text("This is SLIMEY:",
+		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
+		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+	));
+	desc0.pos = {x: descX, y: descY};
+	// Add slimey.
 	const slimey = desc.add(new Slimey());
-	slimey.pos = {x: 300, y: topY - 5};
+	slimey.pos = {x: 300, y: descY - 5};
 	
-	const desc1 = desc.add(new Text(
-		"Use the arrow keys to move it.",
-	{
-		font: "bold 20pt georgia",
-		fill: "#FFFFFF",
-		align: "left"
-	}, {
-		font: "bold 25pt impact",
-		fill: "#000000",
-		align: "left"
-	}));
-	desc1.pos = {x: 70, y: topY + 50};
+	// (2) Second line.
+	const desc1 = desc.add(new Text("Use the arrow keys to move it.",
+		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
+		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+	));
+	desc1.pos = {x: descX, y: descY + 50};
 	
-	const desc2 = desc.add(new Text(
-		"Avoid touching a TOOTHY:",
-	{
-		font: "bold 20pt georgia",
-		fill: "#FFFFFF",
-		align: "left"
-	}, {
-		font: "bold 25pt impact",
-		fill: "#000000",
-		align: "left"
-	}));
-	desc2.pos = {x: 70, y: topY + 100};
-	
+	// (3) Third line.
+	const desc2 = desc.add(new Text("Avoid touching a TOOTHY:",
+		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
+		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+	));
+	desc2.pos = {x: descX, y: descY + 100};
+	// Add toothy.
 	const toothy = desc.add(new Toothy(0, 0));
-	toothy.pos = {x: 450, y: topY + 95};
+	toothy.pos = {x: 450, y: descY + 95};
 	
-	const desc3 = desc.add(new Text(
-		"and collect all SAND:",
-	{
-		font: "bold 20pt georgia",
-		fill: "#FFFFFF",
-		align: "left"
-	}, {
-		font: "bold 25pt impact",
-		fill: "#000000",
-		align: "left"
+	// (4) Fourth line.
+	const desc3 = desc.add(new Text("and collect all SAND:",
+		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
+		{font: "bold 25pt impact", fill: "#000000", align: "left"
 	}));
-	desc3.pos = {x: 70, y: topY + 150};
-	
-	const space = desc.add(new TileSprite(textureBg, 30, 30));
-	space.frame = {x: 3, y: 2};
-	space.pos = {x: 380, y: topY + 145};
-	
-}
-
-function makeSpacebar(spacebar, game) {
-	
-	const message = spacebar.add(new Text(
-		"Press SPACEBAR to start!",
-	{
-		font: "bold 20pt georgia",
-		fill: "red",
-		align: "center"
-	}));
-	message.pos = {x: game.w/2, y: 400};
+	desc3.pos = {x: descX, y: descY + 150};
+	// Add sand.
+	const sand = desc.add(new TileSprite(texture.bg, TILE_W, TILE_H));
+	sand.frame = {x: 3, y: SAND_Y};
+	sand.pos = {x: 380, y: descY + 145};
 	
 }
