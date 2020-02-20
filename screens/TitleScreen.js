@@ -53,7 +53,7 @@ class TitleScreen extends Container {
 		
 		// Add message.
 		const message = this.add(new Text("Press SPACEBAR to start!",
-			{font: "bold 20pt georgia", fill: "red", align: "center"}
+			{font: "bold 20pt georgia", fill: "yellow", align: "center"}
 		));
 		message.visible = false;
 		message.pos = {x: w / 2, y: h - 80};
@@ -121,8 +121,8 @@ function makeDescription(desc, game) {
 	
 	// (1) First line.
 	const desc0 = desc.add(new Text("This is SLIMEY:",
-		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
-		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+		{font: "bold 20pt georgia", fill: "white", align: "left"},
+		{font: "bold 25pt impact", fill: "black", align: "left"}
 	));
 	desc0.pos = {x: descX, y: descY};
 	// Add slimey.
@@ -131,15 +131,15 @@ function makeDescription(desc, game) {
 	
 	// (2) Second line.
 	const desc1 = desc.add(new Text("Use the arrow keys to move it.",
-		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
-		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+		{font: "bold 20pt georgia", fill: "white", align: "left"},
+		{font: "bold 25pt impact", fill: "black", align: "left"}
 	));
 	desc1.pos = {x: descX, y: descY + 50};
 	
 	// (3) Third line.
 	const desc2 = desc.add(new Text("Avoid touching a TOOTHY:",
-		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
-		{font: "bold 25pt impact", fill: "#000000", align: "left"}
+		{font: "bold 20pt georgia", fill: "white", align: "left"},
+		{font: "bold 25pt impact", fill: "black", align: "left"}
 	));
 	desc2.pos = {x: descX, y: descY + 100};
 	// Add toothy.
@@ -148,13 +148,13 @@ function makeDescription(desc, game) {
 	
 	// (4) Fourth line.
 	const desc3 = desc.add(new Text("and collect all SAND:",
-		{font: "bold 20pt georgia", fill: "#FFFFFF", align: "left"},
-		{font: "bold 25pt impact", fill: "#000000", align: "left"
+		{font: "bold 20pt georgia", fill: "white", align: "left"},
+		{font: "bold 25pt impact", fill: "black", align: "left"
 	}));
 	desc3.pos = {x: descX, y: descY + 150};
 	// Add sand.
 	const sand = desc.add(new TileSprite(texture.bg, TILE_W, TILE_H));
 	sand.frame = {x: 3, y: SAND_Y};
-	sand.pos = {x: 380, y: descY + 145};
+	sand.pos = {x: 370, y: descY + 145};
 	
 }

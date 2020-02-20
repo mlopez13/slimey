@@ -7,7 +7,7 @@ const {math, Texture, TileSprite} = mlopez13;
 const texture = new Texture("res/images/tiles.png");
 
 // Constants.
-import {TILE_W, TILE_H, SLIMEY_ROLL_Y, SLIMEY_BLINK_Y, SLIMEY_IDLE_Y} from "../constants/index.js";
+import {TILE_W, TILE_H, SLIMEY_ROLL_Y, SLIMEY_BLINK_Y, SLIMEY_Y} from "../constants/index.js";
 
 // --------
 // --------
@@ -29,7 +29,7 @@ class Slimey extends TileSprite {
 		this.controls = controls;
 		
 		// Set initial position, direction and speed.
-		this.pos = {x: TILE_W, y: 2 * TILE_H};
+		this.pos = {x: TILE_W, y: TILE_H};
 		this.dir = {x: -1, y: 0};
 		this.speed = 0.2;
 		
@@ -37,8 +37,8 @@ class Slimey extends TileSprite {
 		const {anims} = this;
 		anims.add("roll", [0, 1, 2, 3].map(x => ({x, y: SLIMEY_ROLL_Y})), 0.1);
 		anims.add("blink", [0, 1, 2, 3, 3, 2, 1, 0].map(x => ({x, y: SLIMEY_BLINK_Y})), 0.05);
-		anims.add("idle", [0, 1, 2, 3, 3, 2, 1, 0].map(x => ({x, y: SLIMEY_IDLE_Y})), 0.05);
-		anims.play("blink");
+		anims.add("idle", [0, 1, 2, 3, 3, 2, 1, 0].map(x => ({x, y: SLIMEY_Y})), 0.05);
+		anims.play("idle");
 		
 		// Invincibility.
 		this.invincible = 0;
@@ -50,7 +50,7 @@ class Slimey extends TileSprite {
 		
 		if (this.controls) {
 		
-			const {w, h, controls, pos, speed, dir, anims} = this;
+			const {w, h, controls, pos, speed, dir} = this;
 			
 			// Movement.
 			if (controls.x && controls.x !== dir.x) {

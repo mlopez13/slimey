@@ -52,13 +52,13 @@ class GameOverScreen extends Container {
 		// SCORE.
 		const score = new Text("Sand collected: " + stats.sand + "/" + stats.maxSand + " (" +
 			(stats.sand/stats.maxSand*100).toFixed(0) + "%)",
-			{font: "bold 20pt georgia", fill: "yellow", align: "center"}
+			{font: "bold 20pt georgia", fill: "white", align: "center"}
 		);
 		score.pos = {x: w / 2, y: titleY + 120};
 		this.add(score);
 		
 		const message = this.add(new Text("Press SPACEBAR to replay!",
-			{font: "bold 20pt georgia", fill: "red", align: "center"}
+			{font: "bold 20pt georgia", fill: "yellow", align: "center"}
 		));
 		message.visible = false;
 		message.pos = {x: w / 2, y: h - 80};

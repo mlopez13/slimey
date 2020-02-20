@@ -66,6 +66,13 @@ class CanvasRenderer {
 					}
 				}
 				
+				// RECTANGLE.
+				else if (child.rectangle) {
+					const {w, h} = child;
+					ctx.fillStyle = child.rectangle;
+					ctx.fillRect(0, 0, w, h);
+				}
+				
 				// (2) Apply renderRec if child has children.
 				if (child.children) {
 					renderRec(child);

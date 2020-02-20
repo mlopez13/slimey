@@ -3,6 +3,9 @@ import Container from "./Container.js";
 import math from "./utils/math.js";
 import TileSprite from "./TileSprite.js";
 
+// Constants.
+import {SPACE_Y} from "../constants/index.js";
+
 class TileMap extends Container {
 	
 	constructor(tiles, mapW, mapH, tileW, tileH, texture) {
@@ -76,8 +79,8 @@ class TileMap extends Container {
 			return "safe";
 		}
 		this.lastTile = tile;
-		if (tile.frame.y != 0) {
-			this.setFrameAtPixelPos(pos, {x: math.rand(4), y: 0});
+		if (tile.frame.y != SPACE_Y) {
+			this.setFrameAtPixelPos(pos, {x: math.rand(4), y: SPACE_Y});
 			return "sand becomes space";
 		}
 		return "space";

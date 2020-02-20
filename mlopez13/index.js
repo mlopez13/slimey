@@ -2,6 +2,7 @@
 import Container from "./Container.js";
 import Game from "./Game.js";
 import Level from "./Level.js";
+import Rectangle from "./Rectangle.js";
 import Sprite from "./Sprite.js";
 import Text from "./Text.js";
 import Texture from "./Texture.js";
@@ -22,6 +23,7 @@ export default {
 	Container,
 	Game,
 	Level,
+	Rectangle,
 	Sprite,
 	Text,
 	Texture,

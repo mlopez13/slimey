@@ -7,7 +7,7 @@ import TileMap from "./TileMap.js";
 const texture = new Texture("res/images/tiles.png");
 
 // Constants.
-import {TILE_W, TILE_H, SPACE_Y, BLOCK_Y, SAND_Y, FRUIT_Y} from "../constants/index.js";
+import {TILE_W, TILE_H, SPACE_Y, BLOCK_Y, SAND_Y} from "../constants/index.js";
 
 class Level extends TileMap {
 	
@@ -18,26 +18,31 @@ class Level extends TileMap {
 		const mapW = Math.floor(w / tileSize);
 		const mapH = Math.floor(h / tileSize);
 		
-		let initialSand = 0;
+		var initialSand = 0;
 		
 		// Level.
 		const level = [];
+		
 		for (let i = 0; i < mapH; i++) {
 			for (let j = 0; j < mapW; j++) {
 				// Walls.
-				if (i == 0 || i == mapH - 1) {
+				if (i == 0 || i == mapH - 3) {
 					level.push({x: 0, y: BLOCK_Y});
+					continue;
+				}
+				if (i == mapH - 2 || i == mapH - 1) {
+					level.push({x: 2, y: BLOCK_Y});
 					continue;
 				}
 				if (j == 0 || j == mapW - 1) {
 					level.push({x: 1, y: BLOCK_Y});
 					continue;
 				}
-				if (i == 1) {
-					level.push({x: 2, y: BLOCK_Y});
-				}
+				//~ if (i == 1) {
+					//~ level.push({x: 2, y: BLOCK_Y});
+				//~ }
 				else {
-					if (math.randOneIn(4) && (i > 3 || j > 2)) {
+					if (math.randOneIn(4) && (i > 2 || j > 2)) {
 						// Sand.
 						level.push({x: math.rand(4), y: SAND_Y});
 						initialSand++;
@@ -57,8 +62,8 @@ class Level extends TileMap {
 		this.bounds = {
 			left: tileSize,
 			right: w - tileSize*2,
-			top: tileSize*2,
-			bottom: h - tileSize*2
+			top: tileSize,
+			bottom: h - tileSize*4
 		};
 		
 	}
